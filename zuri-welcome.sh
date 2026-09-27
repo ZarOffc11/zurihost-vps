@@ -41,8 +41,8 @@ printf '%s\n' "${C_BLUE}${C_BOLD}   ███╔╝  ██║   ██║██
 printf '%s\n' "${C_PURPLE}${C_BOLD}  ███████╗╚██████╔╝██║  ██║██║██║  ██║╚██████╔╝███████║   ██║   ${C_RESET}"
 printf '%s\n' "${C_PURPLE}${C_BOLD}  ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ${C_RESET}"
 printf '\n'
-printf '%s\n' "${C_WHITE}${C_BOLD}          ☁  ZuriHost · Cloud VPS on Railway  🚂${C_RESET}"
-printf '%s\n' "${C_YELLOW}${C_BOLD}                  https://zurihost.biz.id${C_RESET}"
+printf '%s\n' "${C_WHITE}${C_BOLD}          ☁  ZuriHost · Cloud VPS  🚂${C_RESET}"
+printf '%s\n' "${C_YELLOW}${C_BOLD}           https://zurihost.biz.id${C_RESET}"
 printf '\n'
 
 # Divider
