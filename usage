@@ -1,17 +1,17 @@
 #!/bin/bash
 # ============================================================
-# ZuriHost — Railway Usage Monitor  (command: usage)
+# ZuriHost — Server Usage Monitor  (command: usage)
 # Developer / توسعه‌دهنده: ZuriHost
 # ============================================================
-# Shows remaining Railway trial credit ($5) and how much uptime is left,
+# Shows remaining plan credit and how much uptime is left,
 # based on this container's allocated resources and how long it has run.
 #
 # Two modes:
 #   • ESTIMATE  (no token)  → computes burn from cgroup CPU/RAM + uptime
-#   • LIVE      (RAILWAY_TOKEN set) → also reads real availableCredits from
-#                              the Railway GraphQL API and cross-checks.
+#   • LIVE      (ZURIHOST_TOKEN set) → also reads real availableCredits from
+#                              the billing API and cross-checks.
 #
-# Rates (Railway 2025, overridable via env):
+# Rates (overridable via env):
 #   vCPU  $0.02778/hr · RAM $0.01386/GB/hr · egress $0.05/GB
 #
 # Overrides (handy for testing / custom alloc):
@@ -19,10 +19,10 @@
 # ============================================================
 
 # ---- config / قابل تنظیم ----
-TRIAL=${RAILWAY_TRIAL_CREDIT:-5.00}        # total trial credit ($)
-VCPU_RATE_H=${RAILWAY_VCPU_RATE:-0.02778}  # $ / vCPU / hour
-MEM_RATE_H=${RAILWAY_MEM_RATE:-0.01386}    # $ / GB / hour
-EGRESS_RATE=${RAILWAY_EGRESS_RATE:-0.05}   # $ / GB egress
+TRIAL=${ZURIHOST_TRIAL_CREDIT:-${RAILWAY_TRIAL_CREDIT:-5.00}}   # total plan credit ($)
+VCPU_RATE_H=${ZURIHOST_VCPU_RATE:-${RAILWAY_VCPU_RATE:-0.02778}}  # $ / vCPU / hour
+MEM_RATE_H=${ZURIHOST_MEM_RATE:-${RAILWAY_MEM_RATE:-0.01386}}    # $ / GB / hour
+EGRESS_RATE=${ZURIHOST_EGRESS_RATE:-${RAILWAY_EGRESS_RATE:-0.05}}   # $ / GB egress
 API="https://backboard.railway.com/graphql/v2"
 
 # ---- colors / رنگ‌ها ----
@@ -99,17 +99,18 @@ PCT=$(awk -v u="$USED" -v t="$TRIAL" 'BEGIN{printf "%d", (t>0? u/t*100 : 100)}')
 TRIAL_DAYS=$(awk -v t="$TRIAL" -v b="$BURN_H" 'BEGIN{printf "%.1f", (b>0? t/b/24 : 0)}')
 
 # ---- live API (if token) / کوئری زنده ----
-MODE="${C_YL}ESTIMATE${R} (no RAILWAY_TOKEN)"
+MODE="${C_YL}ESTIMATE${R} (no ZURIHOST_TOKEN)"
 LIVE_AC=""
-if [ -n "$RAILWAY_TOKEN" ]; then
+RTOKEN="${ZURIHOST_TOKEN:-${RAILWAY_TOKEN:-}}"
+if [ -n "$RTOKEN" ]; then
   resp=$(curl -s --max-time 12 -X POST "$API" \
-    -H "Authorization: Bearer $RAILWAY_TOKEN" \
+    -H "Authorization: Bearer $RTOKEN" \
     -H "Content-Type: application/json" \
     -d '{"query":"{ me { name email billingDetails { availableCredits currentBalance } } }"}' 2>/dev/null)
   LIVE_AC=$(printf '%s' "$resp" | jq -r '.data.me.billingDetails.availableCredits // empty' 2>/dev/null)
   LIVE_BAL=$(printf '%s' "$resp" | jq -r '.data.me.billingDetails.currentBalance // empty' 2>/dev/null)
   if [ -n "$LIVE_AC" ] && [ "$LIVE_AC" != "null" ]; then
-    MODE="${C_GN}LIVE${R} (Railway API)"
+    MODE="${C_GN}LIVE${R} (live billing)"
   fi
 fi
 
@@ -133,14 +134,14 @@ bar() { # percent -> colored progress bar (no leading spaces)
 
 # ---- render / نمایش ----
 printf '\n'
-printf "  ${C_CY}${B}ZuriHost${R} ${C_GR}·${R} ${C_WH}${B}Railway Usage Monitor${R}\n"
+printf "  ${C_CY}${B}ZuriHost${R} ${C_GR}·${R} ${C_WH}${B}Server Usage Monitor${R}\n"
 printf "  ${C_GR}────────────────────────────────────────────────\n${R}"
 printf "  ${C_BL}Mode${R}        ${C_GR}│${R} ${MODE}\n"
-printf "  ${C_BL}Trial credit${R} ${C_GR}│${R} ${C_WH}${B}\$%.2f${R}\n" "$TRIAL"
+printf "  ${C_BL}Plan credit${R} ${C_GR}│${R} ${C_WH}${B}\$%.2f${R}\n" "$TRIAL"
 printf "  ${C_BL}Resources${R}   ${C_GR}│${R} ${C_WH}%.2f vCPU${R} ${C_GR}+${R} ${C_WH}%.2f GB RAM${R} ${C_GR}(egress ≈ %.3f GB)${R}\n" "$CPU" "$MEM" "$EG"
 printf "  ${C_BL}Runtime${R}     ${C_GR}│${R} ${C_WH}%s${R}\n" "$(fmt_dur "$AGE")"
 printf "  ${C_BL}Burn rate${R}   ${C_GR}│${R} ${C_YL}\$%.5f / hr${R}\n" "$BURN_H"
-printf "  ${C_BL}Trial lasts${R} ${C_GR}│${R} ${C_CY}${B}%.1f days${R} ${C_GR}@ current burn${R}\n" "$TRIAL_DAYS"
+printf "  ${C_BL}Plan lasts${R}  ${C_GR}│${R} ${C_CY}${B}%.1f days${R} ${C_GR}@ current burn${R}\n" "$TRIAL_DAYS"
 printf "  ${C_BL}Used${R}        ${C_GR}│${R} ${C_YL}\$%.2f${R}  " "$USED"
 bar
 printf "\n"
@@ -148,7 +149,7 @@ printf "  ${C_BL}Remaining${R}   ${C_GR}│${R} "
 if awk -v r="$REMAIN" 'BEGIN{exit !(r>0)}'; then
   printf "${C_GN}${B}\$%.2f${R}" "$REMAIN"
 else
-  printf "${C_RD}${B}\$%.2f (credit exhausted — service will sleep)${R}" "$REMAIN"
+  printf "${C_RD}${B}\$%.2f (credit exhausted — server will be suspended)${R}" "$REMAIN"
 fi
 printf "\n"
 if [ -n "$LIVE_AC" ] && [ "$LIVE_AC" != "null" ]; then
@@ -158,6 +159,6 @@ if [ -n "$LIVE_AC" ] && [ "$LIVE_AC" != "null" ]; then
 fi
 printf "  ${C_BL}Uptime left${R} ${C_GR}│${R} ${C_CY}${B}%s${R} ${C_GR}(at current burn)${R}\n" "$(fmt_dur "$(awk -v h="$REMAIN_UP_H" 'BEGIN{printf "%d", h*3600}')")"
 printf "  ${C_GR}────────────────────────────────────────────────\n${R}"
-printf "  ${C_GR}Tip:${R} ${C_WH}export RAILWAY_TOKEN=<account_token>${R} ${C_GR}for exact live credit.${R}\n"
+printf "  ${C_GR}Tip:${R} ${C_WH}export ZURIHOST_TOKEN=<account_token>${R} ${C_GR}for exact live credit.${R}\n"
 printf "       ${C_WH}export USAGE_CPU / USAGE_MEM_GB${R} ${C_GR}to override allocation.${R}\n"
 printf '\n'

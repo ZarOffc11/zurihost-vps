@@ -1,8 +1,7 @@
-# ZuriHost — Railway Ubuntu SSH VPS
+# ZuriHost — Ubuntu SSH Cloud Server
 
-Ubuntu 24.04 + OpenSSH server image that ZuriHost deploys on Railway to give
-each customer a ready-to-use cloud VPS, reachable over SSH via a Railway TCP
-proxy on port 22.
+Ubuntu 24.04 + OpenSSH server image that ZuriHost provisions to give
+each customer a ready-to-use cloud server, reachable over SSH on port 22.
 
 Website: **https://zurihost.biz.id**
 
@@ -13,7 +12,7 @@ Website: **https://zurihost.biz.id**
   monitoring, archivers, networking utilities).
 - Claude Code CLI pre-installed (`cl` opens it in a tmux session).
 - A branded ZuriHost login banner (`/etc/profile.d/zuri-welcome.sh`).
-- `usage` — Railway trial credit + uptime monitor.
+- `usage` — server resource usage + uptime monitor.
 - `src-sync` — optional `/root/src` ⇄ private GitHub backup.
 
 ## Runtime environment variables
@@ -30,6 +29,5 @@ See [TOKENS.md](TOKENS.md) for token details.
 
 ## Build
 
-Railway builds this repo from its `Dockerfile` (`railway.json` declares the
-Dockerfile builder). The start command (`ssh-user-config.sh`) applies the
-runtime password/keys and launches `sshd`.
+The image is built from its `Dockerfile`. The start command
+(`ssh-user-config.sh`) applies the runtime password/keys and launches `sshd`.

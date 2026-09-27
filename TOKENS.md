@@ -5,7 +5,7 @@
 > - **GitHub token** → your `/root/src` folder is auto‑backed up to a **private** repo and restored on every redeploy (your work survives container rebuilds).
 > - **OpenRouter token** → powers **Claude Code** inside the container (chat, code, agents).
 >
-> Both are **optional** but highly recommended. Neither is ever baked into the image — you set them as Railway environment variables.
+> Both are **optional** but highly recommended. Neither is ever baked into the image — you set them as environment variables.
 
 ---
 
@@ -25,7 +25,7 @@ This token lets the container create a private `zurihost-src-<id>` repo and sync
 6. 📋 **Copy** the token (starts with `ghp_`). **You won't see it again!**
 
 ### 📥 Where to paste it
-In Railway, add this environment variable:
+Add this environment variable:
 
 ```bash
 GITHUB_TOKEN = ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -51,7 +51,7 @@ This token gives the container access to Claude models via OpenRouter (the defau
 4. 📋 **Copy** the key (starts with `sk-or-`).
 
 ### 📥 Where to paste it
-In Railway, add this environment variable:
+Add this environment variable:
 
 ```bash
 ANTHROPIC_AUTH_TOKEN = sk-or-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -89,5 +89,5 @@ cl          # or:  زم   → launches Claude Code inside a tmux session
 
 <p align="center">
   <b>© ZuriHost</b> · Maintained by <b>ZuriHost</b><br>
-  ☁ Railway Ubuntu SSH + Claude Code
+  ☁ ZuriHost Cloud Server + Claude Code
 </p>

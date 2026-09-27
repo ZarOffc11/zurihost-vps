@@ -1,10 +1,10 @@
 # ============================================================
-# ZuriHost — Railway Ubuntu SSH Server  ·  https://zurihost.biz.id
+# ZuriHost — Ubuntu SSH Cloud Server  ·  https://zurihost.biz.id
 # ============================================================
 # A Docker image that provides an Ubuntu 24.04 base with an SSH server
-# (SSHD) enabled, so you can connect to your Railway container via SSH.
+# (SSHD) enabled, so you can connect to your cloud server via SSH.
 # ایمیج داکری بر پایه Ubuntu 24.04 با سرور SSH (SSHD) فعال،
-# برای اتصال از طریق SSH به کانتینر Railway شما.
+# برای اتصال از طریق SSH به سرور ابری شما.
 
 FROM ubuntu:24.04
 
@@ -88,8 +88,8 @@ COPY cl /usr/local/bin/cl
 RUN chmod +x /usr/local/bin/cl \
     && ln -sf /usr/local/bin/cl /usr/local/bin/زم
 
-# Copy the "usage" command (Railway trial credit + uptime monitor)
-# کپی دستور «usage» (مانیتور اعتبار تریال و زمان بیداری Railway)
+# Copy the "usage" command (server resource usage + uptime monitor)
+# کپی دستور «usage» (مانیتور مصرف منابع و زمان کارکرد سرور)
 COPY usage /usr/local/bin/usage
 RUN chmod +x /usr/local/bin/usage
 

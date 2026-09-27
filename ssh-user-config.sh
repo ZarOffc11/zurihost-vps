@@ -106,10 +106,10 @@ fi
 # OPTIONAL CLAUDE CODE AUTH TOKEN / توکن اختیاری Claude Code
 # ---------------------------------------------------------------
 # The token is NOT baked in. Supply it via the ANTHROPIC_AUTH_TOKEN build arg
-# or (recommended) as a Railway environment variable — it is applied on every
+# or (recommended) as a platform environment variable — it is applied on every
 # container start, so editing it takes effect on the next deploy.
 # توکن بیک نمی‌شود. آن را از طریق آرگومان ساخت ANTHROPIC_AUTH_TOKEN یا
-# (توصیه می‌شود) به عنوان متغیر محیطی Railway ست کنید — روی هر اجرا اعمال
+# (توصیه می‌شود) به عنوان متغیر محیطی پلتفرم ست کنید — روی هر اجرا اعمال
 # می‌شود، بنابراین ویرایش آن روی دیپلوی بعدی اثر می‌گذارد.
 : ${ANTHROPIC_AUTH_TOKEN:=""}
 

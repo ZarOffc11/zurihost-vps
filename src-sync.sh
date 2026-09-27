@@ -4,7 +4,7 @@
 # Developer / توسعه‌دهنده: ZuriHost
 # ============================================================
 # Keeps /root/src backed up to a PRIVATE GitHub repo (prefix: zurihost-src-)
-# so your work survives Railway container rebuilds.
+# so your work survives container rebuilds.
 #
 #   src-sync            push now (backup)
 #   src-sync backup     push now (backup) — same as above
@@ -72,7 +72,7 @@ create_repo() {
 
 remote_url() { echo "https://$TOKEN@github.com/$1/$2.git"; }
 
-# resolve the linked repo (name stored, else by RAILWAY_PROJECT_ID, else by prefix)
+# resolve the linked repo (name stored, else derived from the platform project id, else by prefix)
 resolve_name() {
   [ -f "$MARK" ] && { cat "$MARK"; return; }
   local id; id=$(repo_name | sed 's/^zurihost-src-//')
