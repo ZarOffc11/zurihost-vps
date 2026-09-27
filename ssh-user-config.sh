@@ -155,9 +155,9 @@ configure_claude_settings
 # ---------------------------------------------------------------
 # SRC FOLDER ⇄ GITHUB SYNC / همگام‌سازی پوشه src با GitHub
 # ---------------------------------------------------------------
-# /root/src is auto-backed up to a PRIVATE repo (ara-tm-src-<id>) and restored
+# /root/src is auto-backed up to a PRIVATE repo (zurihost-src-<id>) and restored
 # on every start, so your work survives container rebuilds.
-# پوشه src به صورت خودکار در یک مخزن خصوصی (ara-tm-src-<id>) پشتیبان‌گیری شده
+# پوشه src به صورت خودکار در یک مخزن خصوصی (zurihost-src-<id>) پشتیبان‌گیری شده
 # و در هر اجرا بازیابی می‌شود تا کار شما با بازسازی کانتینر از دست نرود.
 : ${GITHUB_TOKEN:=""}
 SRC_DIR=/root/src

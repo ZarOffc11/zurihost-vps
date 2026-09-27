@@ -3,7 +3,7 @@
 # ZuriHost — src folder ⇄ GitHub sync (backup + restore)
 # Developer / توسعه‌دهنده: ZuriHost
 # ============================================================
-# Keeps /root/src backed up to a PRIVATE GitHub repo (prefix: ara-tm-src-)
+# Keeps /root/src backed up to a PRIVATE GitHub repo (prefix: zurihost-src-)
 # so your work survives Railway container rebuilds.
 #
 #   src-sync            push now (backup)
@@ -75,14 +75,14 @@ remote_url() { echo "https://$TOKEN@github.com/$1/$2.git"; }
 # resolve the linked repo (name stored, else by RAILWAY_PROJECT_ID, else by prefix)
 resolve_name() {
   [ -f "$MARK" ] && { cat "$MARK"; return; }
-  local id; id=$(repo_name | sed 's/^ara-tm-src-//')
+  local id; id=$(repo_name | sed 's/^zurihost-src-//')
   local u; u=$(gh_user); [ -n "$u" ] || return 1
   local found
   found=$(curl -s --max-time 12 -H "Authorization: Bearer $TOKEN" \
     "$API/user/repos?per_page=100&affiliation=owner" \
-    | jq -r --arg p "ara-tm-src-$id" --arg px "ara-tm-src-" \
+    | jq -r --arg p "zurihost-src-$id" --arg px "zurihost-src-" \
       '.[] | select(.name==$p or (.name|startswith($px))) | .name' 2>/dev/null | head -1)
-  echo "${found:-ara-tm-src-$id}"
+  echo "${found:-zurihost-src-$id}"
 }
 
 do_init() {

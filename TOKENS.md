@@ -11,10 +11,10 @@
 
 ## 1️⃣ GitHub Token — for automatic `src` backup
 
-This token lets the container create a private `ara-tm-src-<id>` repo and sync your files.
+This token lets the container create a private `zurihost-src-<id>` repo and sync your files.
 
 ### 🚀 Direct link (one click)
-[➡️ Create a GitHub Personal Access Token](https://github.com/settings/tokens/new?description=ARA%20TM%20src-sync&scopes=repo)
+[➡️ Create a GitHub Personal Access Token](https://github.com/settings/tokens/new?description=ZuriHost%20src-sync&scopes=repo)
 
 ### 🪜 Steps
 1. Open the link above ⬆️ (or **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**).
