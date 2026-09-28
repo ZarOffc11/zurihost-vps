@@ -49,6 +49,22 @@ msg "Root password set — you can now connect as root" \
     "رمز عبور root تنظیم شد — اکنون می‌توانید با کاربر root متصل شوید"
 
 # ---------------------------------------------------------------
+# CLEAN LOGIN SCREEN / پاکسازی صفحه ورود
+# ---------------------------------------------------------------
+# Strip Ubuntu's default MOTD at runtime so no leftover "Welcome to Ubuntu /
+# system has been minimized / run 'unminimize'" notice prints above the
+# ZuriHost banner. Done here (not only in the Dockerfile) so it holds even when
+# the image is served from a cached build layer. pam_motd runs update-motd.d on
+# login, so we clear the scripts, the generated dynamic motd, the static motd
+# and /etc/legal. Idempotent — safe to run on every container start.
+# حذف MOTD پیش‌فرض اوبونتو در زمان اجرا تا هیچ پیام باقی‌مانده‌ای (مثل «welcome
+# to ubuntu» یا «unminimize») بالای بنر ZuriHost چاپ نشود. اینجا انجام می‌شود
+# (نه فقط در Dockerfile) تا حتی با لایه ساخت کش‌شده هم اعمال شود. تکرارپذیر است.
+rm -f /etc/update-motd.d/* /etc/legal 2>/dev/null || true
+: > /etc/motd 2>/dev/null || true
+: > /run/motd.dynamic 2>/dev/null || true
+
+# ---------------------------------------------------------------
 # RUNTIME STATE DIR / دایرکتوری وضعیت زمان اجرا
 # ---------------------------------------------------------------
 # Holds src-sync state (GitHub token, linked repo name). Created early so the
