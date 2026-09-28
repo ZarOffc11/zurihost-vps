@@ -71,6 +71,5 @@ row " src     " "│" "${_src}"
 
 printf '%s\n' "$line"
 printf "  ${C_GREEN}➜${C_RESET} ${C_DIM}Run${C_RESET} ${C_YELLOW}${C_BOLD}cl${C_RESET} ${C_DIM}to launch Claude Code in tmux${C_RESET}\n"
-printf "  ${C_GREEN}➜${C_RESET} ${C_DIM}Run${C_RESET} ${C_YELLOW}${C_BOLD}usage${C_RESET} ${C_DIM}to check resource usage & uptime left${C_RESET}\n"
 printf "  ${C_GREEN}➜${C_RESET} ${C_DIM}Need help?${C_RESET} ${C_CYAN}${C_BOLD}https://zurihost.biz.id${C_RESET}\n"
 printf '\n'

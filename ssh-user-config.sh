@@ -49,15 +49,13 @@ msg "Root password set — you can now connect as root" \
     "رمز عبور root تنظیم شد — اکنون می‌توانید با کاربر root متصل شوید"
 
 # ---------------------------------------------------------------
-# DEPLOY START MARKER / نشانگر زمان استقرار
+# RUNTIME STATE DIR / دایرکتوری وضعیت زمان اجرا
 # ---------------------------------------------------------------
-# Record the first-deploy time once, so the `usage` timer measures from
-# deploy (not from each container restart). Stable across restarts.
-# زمان اولین استقرار را یک‌بار ثبت می‌کند تا تایمر «usage» از زمان استقرار
-# باشد (نه هر ری‌استارت). در برابر ری‌استارت پایدار است.
-DEPLOY_MARK=/var/lib/ara/deploy-start
+# Holds src-sync state (GitHub token, linked repo name). Created early so the
+# later src-sync steps can write into it.
+# نگه‌دارنده وضعیت src-sync (توکن گیت‌هاب و نام مخزن پیوندشده). زود ساخته می‌شود
+# تا مراحل بعدی src-sync بتوانند در آن بنویسند.
 mkdir -p /var/lib/ara
-[ -f "$DEPLOY_MARK" ] || date +%s > "$DEPLOY_MARK"
 
 # ---------------------------------------------------------------
 # OPTIONAL SUDO USER / کاربر sudo اختیاری

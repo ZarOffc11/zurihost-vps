@@ -88,11 +88,6 @@ COPY cl /usr/local/bin/cl
 RUN chmod +x /usr/local/bin/cl \
     && ln -sf /usr/local/bin/cl /usr/local/bin/زم
 
-# Copy the "usage" command (server resource usage + uptime monitor)
-# کپی دستور «usage» (مانیتور مصرف منابع و زمان کارکرد سرور)
-COPY usage /usr/local/bin/usage
-RUN chmod +x /usr/local/bin/usage
-
 # Copy the "src-sync" command (/root/src ⇄ private GitHub repo for persistence)
 # کپی دستور «src-sync» (همگام‌سازی پوشه src با مخزن خصوصی GitHub برای پایداری داده‌ها)
 COPY src-sync.sh /usr/local/bin/src-sync

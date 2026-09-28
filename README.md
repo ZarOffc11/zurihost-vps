@@ -12,7 +12,6 @@ Website: **https://zurihost.biz.id**
   monitoring, archivers, networking utilities).
 - Claude Code CLI pre-installed (`cl` opens it in a tmux session).
 - A branded ZuriHost login banner (`/etc/profile.d/zuri-welcome.sh`).
-- `usage` — server resource usage + uptime monitor.
 - `src-sync` — optional `/root/src` ⇄ private GitHub backup.
 
 ## Runtime environment variables
