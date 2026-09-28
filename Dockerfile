@@ -45,14 +45,26 @@ RUN apt-get update \
     && ssh-keygen -A \
     && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
     # Enable root login / فعال کردن ورود root
-    && echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    && echo "PermitRootLogin yes" >> /etc/ssh/sshd_config \
+    # Don't print the "Last login" line — keep the login screen clean for our banner
+    # عدم نمایش خط «Last login» تا صفحه ورود برای بنر ما تمیز بماند
+    && echo "PrintLastLog no" >> /etc/ssh/sshd_config
 
 # Generate English and Persian locales / تولید لوکِیل‌های انگلیسی و فارسی
 RUN locale-gen en_US.UTF-8 fa_IR.UTF-8
 
 # ZuriHost welcome banner shown on interactive SSH login (https://zurihost.biz.id)
+# Also strip Ubuntu's default MOTD (the dynamic update-motd.d scripts + static
+# /etc/motd and /etc/legal, e.g. the "system has been minimized / unminimize"
+# notice) so nothing leftover appears above our banner.
+# همچنین MOTD پیش‌فرض اوبونتو (اسکریپت‌های داینامیک update-motd.d و فایل‌های
+# ثابت /etc/motd و /etc/legal، مثل پیام «unminimize») حذف می‌شود تا چیزی بالای
+# بنر ما باقی نماند.
 COPY zuri-welcome.sh /etc/profile.d/zuri-welcome.sh
-RUN chmod +x /etc/profile.d/zuri-welcome.sh
+RUN chmod +x /etc/profile.d/zuri-welcome.sh \
+    && rm -f /etc/update-motd.d/* \
+    && : > /etc/motd \
+    && rm -f /etc/legal
 
 # Set locale and terminal environment / تنظیم لوکِیل و محیط ترمینال
 ENV LANG=en_US.UTF-8

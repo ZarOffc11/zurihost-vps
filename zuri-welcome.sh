@@ -9,6 +9,11 @@
 # Only run for interactive terminals
 [ -t 1 ] || return 0 2>/dev/null || exit 0
 
+# Start from a clean screen — wipe any leftover Ubuntu MOTD / login noise that
+# printed above us (2J clears the screen, H homes the cursor, 3J drops the
+# scrollback where the terminal supports it).
+printf '\033[3J\033[H\033[2J'
+
 # ---- Colors ----
 C_RESET=$'\e[0m'; C_BOLD=$'\e[1m'; C_DIM=$'\e[2m'
 C_CYAN=$'\e[38;5;51m'; C_BLUE=$'\e[38;5;33m'; C_PURPLE=$'\e[38;5;135m'
